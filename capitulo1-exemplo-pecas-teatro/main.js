@@ -24,17 +24,17 @@ function statement(invoice, plays) {
                     // exemplo: performance.audience for 50, 10000 + (500 * 30) (performance.audience - 20), ou seja, vou somar no thisAmount 30000 + 10000 + 15000
                     thisAmount += 10000 + 500 * (performance.audience - 20);
                 }
+                thisAmount += 300 * performance.audience;
                 break;
             default:
                 throw new Error(`unknown type: ${play.type}`);
         }
-
         // soma créditos por volume
         volumeCredits += Math.max(performance.audience - 30, 0);
-        if ("comedy" === play.type) volumeCredits += Math.floor(performance.audince / 10);
+        if ("comedy" === play.type) volumeCredits += Math.floor(performance.audience / 5);
 
         // exibe a linha para esta requisição
-        result += ` ${play.name}: ${format(thisAmount/100)} (${performance.audience} seats)\n`;
+        result += ` ${play.name}: ${format(thisAmount / 100)} (${performance.audience} seats)\n`;
         totalAmount += thisAmount;
     }
 
