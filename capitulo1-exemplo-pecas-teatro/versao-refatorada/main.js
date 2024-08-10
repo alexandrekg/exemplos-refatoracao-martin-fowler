@@ -1,6 +1,10 @@
 const plays = require('./plays.json');
 const invoices = require('./invoices.json');
 
+function playFor(arrayPerformance) {
+    return plays[arrayPerformance.playID];
+}
+
 function amountFor(arrayPerformance, play) {
     let result = 0;
 
@@ -27,13 +31,13 @@ function amountFor(arrayPerformance, play) {
     return result;
 }
 
-function statement(invoice, plays) {
+function statement(invoice) {
     let totalAmount = 0;
     let volumeCredits = 0;
     let result = `Statement for ${invoice.customer}\n`
     const format = new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
     for (let performance of invoice.performances) {
-        const play = plays[performance.playID];
+        const play = playFor(performance);
         let thisAmount = amountFor(performance, play);
         
         // soma créditos por volume
@@ -51,4 +55,4 @@ function statement(invoice, plays) {
 }
 
 
-console.log(statement(invoices, plays));
+console.log(statement(invoices));
