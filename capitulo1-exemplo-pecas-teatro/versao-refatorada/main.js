@@ -37,15 +37,14 @@ function statement(invoice) {
     let result = `Statement for ${invoice.customer}\n`
     const format = new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
     for (let performance of invoice.performances) {
-        const play = playFor(performance);
-        let thisAmount = amountFor(performance, play);
+        let thisAmount = amountFor(performance, playFor(performance));
         
         // soma créditos por volume
         volumeCredits += Math.max(performance.audience - 30, 0);
-        if ("comedy" === play.type) volumeCredits += Math.floor(performance.audience / 5);
+        if ("comedy" === playFor(performance).type) volumeCredits += Math.floor(performance.audience / 5);
 
         // exibe a linha para esta requisição
-        result += ` ${play.name}: ${format(thisAmount / 100)} (${performance.audience} seats)\n`;
+        result += ` ${playFor(performance).name}: ${format(thisAmount / 100)} (${performance.audience} seats)\n`;
         totalAmount += thisAmount;
     }
 
