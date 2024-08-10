@@ -2,29 +2,29 @@ const plays = require('./plays.json');
 const invoices = require('./invoices.json');
 
 function amountFor(performance, play) {
-    let thisAmount = 0;
+    let result = 0;
 
     switch (play.type) {
         case "tragedy":
-            thisAmount = 40000;
+            result = 40000;
             if (performance.audience > 30) {
-                // exemplo: performance.audience for 50, 1000 * 20 (performance.audience - 30), ou seja, vou somar no thisAmount 40000 + 20000
-                thisAmount += 1000 * (performance.audience - 30);
+                // exemplo: performance.audience for 50, 1000 * 20 (performance.audience - 30), ou seja, vou somar no result 40000 + 20000
+                result += 1000 * (performance.audience - 30);
             }
             break;
         case "comedy":
-            thisAmount = 30000;
+            result = 30000;
             if (performance.audience > 20) {
-                // exemplo: performance.audience for 50, 10000 + (500 * 30) (performance.audience - 20), ou seja, vou somar no thisAmount 30000 + 10000 + 15000
-                thisAmount += 10000 + 500 * (performance.audience - 20);
+                // exemplo: performance.audience for 50, 10000 + (500 * 30) (performance.audience - 20), ou seja, vou somar no result 30000 + 10000 + 15000
+                result += 10000 + 500 * (performance.audience - 20);
             }
-            thisAmount += 300 * performance.audience;
+            result += 300 * performance.audience;
             break;
         default:
             throw new Error(`unknown type: ${play.type}`);
     }
 
-    return thisAmount;
+    return result;
 }
 
 function statement(invoice, plays) {
