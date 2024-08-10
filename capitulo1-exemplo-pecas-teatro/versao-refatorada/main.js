@@ -5,15 +5,15 @@ function playFor(arrayPerformance) {
     return plays[arrayPerformance.playID];
 }
 
-function amountFor(arrayPerformance, play) {
+function amountFor(arrayPerformance) {
     let result = 0;
 
-    switch (playFor(performance).type) {
+    switch (playFor(arrayPerformance).type) {
         case "tragedy":
             result = 40000;
             if (arrayPerformance.audience > 30) {
                 // exemplo: arrayPerformance.audience for 50, 1000 * 20 (arrayPerformance.audience - 30), ou seja, vou somar no result 40000 + 20000
-                result += 1000 * (performance.audience - 30);
+                result += 1000 * (arrayPerformance.audience - 30);
             }
             break;
         case "comedy":
@@ -25,7 +25,7 @@ function amountFor(arrayPerformance, play) {
             result += 300 * arrayPerformance.audience;
             break;
         default:
-            throw new Error(`unknown type: ${playFor(performance).type}`);
+            throw new Error(`unknown type: ${playFor(arrayPerformance).type}`);
     }
 
     return result;
@@ -37,7 +37,7 @@ function statement(invoice) {
     let result = `Statement for ${invoice.customer}\n`
     const format = new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
     for (let performance of invoice.performances) {
-        let thisAmount = amountFor(performance, );
+        let thisAmount = amountFor(performance);
         
         // soma créditos por volume
         volumeCredits += Math.max(performance.audience - 30, 0);
