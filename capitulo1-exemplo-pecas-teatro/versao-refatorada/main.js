@@ -8,7 +8,7 @@ function playFor(arrayPerformance) {
 function amountFor(arrayPerformance, play) {
     let result = 0;
 
-    switch (play.type) {
+    switch (playFor(performance).type) {
         case "tragedy":
             result = 40000;
             if (arrayPerformance.audience > 30) {
@@ -25,7 +25,7 @@ function amountFor(arrayPerformance, play) {
             result += 300 * arrayPerformance.audience;
             break;
         default:
-            throw new Error(`unknown type: ${play.type}`);
+            throw new Error(`unknown type: ${playFor(performance).type}`);
     }
 
     return result;
@@ -37,7 +37,7 @@ function statement(invoice) {
     let result = `Statement for ${invoice.customer}\n`
     const format = new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
     for (let performance of invoice.performances) {
-        let thisAmount = amountFor(performance, playFor(performance));
+        let thisAmount = amountFor(performance, );
         
         // soma créditos por volume
         volumeCredits += Math.max(performance.audience - 30, 0);
