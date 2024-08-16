@@ -1,6 +1,13 @@
 const plays = require('./plays.json');
 const invoices = require('./invoices.json');
 
+function volumeCreditsFor(arrayPerformance) {
+    let result = 0;
+    result += Math.max(arrayPerformance.audience - 30, 0);
+    if ("comedy" === playFor(arrayPerformance).type) result += Math.floor(arrayPerformance / 5);
+    return result;
+}
+
 function playFor(arrayPerformance) {
     return plays[arrayPerformance.playID];
 }
@@ -36,16 +43,13 @@ function statement(invoice) {
     let volumeCredits = 0;
     let result = `Statement for ${invoice.customer}\n`
     const format = new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
-    for (let performance of invoice.performances) {
-        let thisAmount = amountFor(performance);
-        
+    for (let performance of invoice.performances) {        
         // soma créditos por volume
-        volumeCredits += Math.max(performance.audience - 30, 0);
-        if ("comedy" === playFor(performance).type) volumeCredits += Math.floor(performance.audience / 5);
+        volumeCredits += volumeCreditsFor(performance);
 
         // exibe a linha para esta requisição
-        result += ` ${playFor(performance).name}: ${format(thisAmount / 100)} (${performance.audience} seats)\n`;
-        totalAmount += thisAmount;
+        result += ` ${playFor(performance).name}: ${format(amountFor(performance) / 100)} (${performance.audience} seats)\n`;
+        totalAmount += amountFor(performance);
     }
 
     result += `Amount owed is ${format(totalAmount / 100)}\n`;
