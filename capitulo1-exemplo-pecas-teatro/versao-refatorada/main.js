@@ -1,6 +1,18 @@
 const plays = require('./plays.json');
 const invoices = require('./invoices.json');
 
+
+function statement(invoice) {
+    let result = `Statement for ${invoice.customer}\n`
+    for (let performance of invoice.performances) {        
+        result += ` ${playFor(performance).name}: ${usd(amountFor(performance))} (${performance.audience} seats)\n`;
+    }
+
+    result += `Amount owed is ${usd(totalAmount())}\n`;
+    result += `You earned ${totalVolumeCredits()} credits\n`;
+    return result;
+}
+
 function totalAmount() {
     let result = 0;
     for (let perf of invoices.performances) {
@@ -18,15 +30,15 @@ function totalVolumeCredits() {
     return result;
 }
 
+function usd(aNumber) {
+    return new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format(aNumber / 100);
+}
+
 function volumeCreditsFor(arrayPerformance) {
     let result = 0;
     result += Math.max(arrayPerformance.audience - 30, 0);
     if ("comedy" === playFor(arrayPerformance).type) result += Math.floor(arrayPerformance.audience / 5);
     return result;
-}
-
-function usd(aNumber) {
-    return new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format(aNumber / 100);
 }
 
 function playFor(arrayPerformance) {
@@ -56,17 +68,6 @@ function amountFor(arrayPerformance) {
             throw new Error(`unknown type: ${playFor(arrayPerformance).type}`);
     }
 
-    return result;
-}
-
-function statement(invoice) {
-    let result = `Statement for ${invoice.customer}\n`
-    for (let performance of invoice.performances) {        
-        result += ` ${playFor(performance).name}: ${usd(amountFor(performance))} (${performance.audience} seats)\n`;
-    }
-
-    result += `Amount owed is ${usd(totalAmount())}\n`;
-    result += `You earned ${totalVolumeCredits()} credits\n`;
     return result;
 }
 
