@@ -3,12 +3,20 @@ const invoices = require('./invoices.json');
 
 
 function statement(invoice, plays) {
-    return renderPlainText(invoice, plays)
+    const statementData = {};
+    statementData.customer = invoice.customer;
+    statementData.performances = invoice.performances.map(enrichPerformance);
+    return renderPlainText(statementData, plays)
 }
 
-function renderPlainText(invoice, plays) {
-    let result = `Statement for ${invoice.customer}\n`
-    for (let performance of invoice.performances) {        
+function enrichPerformance(aPerformance) {
+    const result = Object.assign({}, aPerformance);
+    return result;
+}
+
+function renderPlainText(data) {
+    let result = `Statement for ${data.customer}\n`
+    for (let performance of data.performances) {        
         result += ` ${playFor(performance).name}: ${usd(amountFor(performance))} (${performance.audience} seats)\n`;
     }
 
