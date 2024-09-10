@@ -2,10 +2,28 @@ const plays = require('./plays.json');
 const invoices = require('./invoices.json');
 
 
-function statement(invoice) {
-    let result = `Statement for ${invoice.customer}\n`
-    for (let performance of invoice.performances) {        
-        result += ` ${playFor(performance).name}: ${usd(amountFor(performance))} (${performance.audience} seats)\n`;
+function statement(invoice, plays) {
+    const statementData = {};
+    statementData.customer = invoice.customer;
+    statementData.performances = invoice.performances.map(enrichPerformance);
+    return renderPlainText(statementData, plays)
+}
+
+function enrichPerformance(aPerformance) {
+    const result = Object.assign({}, aPerformance);
+    result.play = playFor(result);
+    result.amount = amountFor(result)
+    return result;
+}
+
+function playFor(aPerformance) {
+    return plays[aPerformance.playID]
+}
+
+function renderPlainText(data) {
+    let result = `Statement for ${data.customer}\n`
+    for (let performance of data.performances) {        
+        result += ` ${performance.play.name}: ${usd(amountFor(performance))} (${performance.audience} seats)\n`;
     }
 
     result += `Amount owed is ${usd(totalAmount())}\n`;
@@ -37,7 +55,7 @@ function usd(aNumber) {
 function volumeCreditsFor(arrayPerformance) {
     let result = 0;
     result += Math.max(arrayPerformance.audience - 30, 0);
-    if ("comedy" === playFor(arrayPerformance).type) result += Math.floor(arrayPerformance.audience / 5);
+    if ("comedy" === arrayPerformance.type) result += Math.floor(arrayPerformance.audience / 5);
     return result;
 }
 
@@ -71,4 +89,4 @@ function amountFor(arrayPerformance) {
     return result;
 }
 
-console.log(statement(invoices));
+console.log(statement(invoices, plays));
