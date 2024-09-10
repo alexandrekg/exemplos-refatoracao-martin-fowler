@@ -11,13 +11,19 @@ function statement(invoice, plays) {
 
 function enrichPerformance(aPerformance) {
     const result = Object.assign({}, aPerformance);
+    result.play = playFor(result);
+    result.amount = amountFor(result)
     return result;
+}
+
+function playFor(aPerformance) {
+    return plays[aPerformance.playID]
 }
 
 function renderPlainText(data) {
     let result = `Statement for ${data.customer}\n`
     for (let performance of data.performances) {        
-        result += ` ${playFor(performance).name}: ${usd(amountFor(performance))} (${performance.audience} seats)\n`;
+        result += ` ${performance.play.name}: ${usd(amountFor(performance))} (${performance.audience} seats)\n`;
     }
 
     result += `Amount owed is ${usd(totalAmount())}\n`;
@@ -49,7 +55,7 @@ function usd(aNumber) {
 function volumeCreditsFor(arrayPerformance) {
     let result = 0;
     result += Math.max(arrayPerformance.audience - 30, 0);
-    if ("comedy" === playFor(arrayPerformance).type) result += Math.floor(arrayPerformance.audience / 5);
+    if ("comedy" === arrayPerformance.type) result += Math.floor(arrayPerformance.audience / 5);
     return result;
 }
 
