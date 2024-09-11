@@ -29,6 +29,13 @@ class PerformanceCalculator {
     
         return result;
     }
+
+    getVolumeCredits() {
+        let result = 0;
+        result += Math.max(this.performance.audience - 30, 0);
+        if ("comedy" === this.play.type) result += Math.floor(this.performance.audience / 5);
+        return result;
+    }
 }
 
 export default function createStatementData(invoice, plays) {
@@ -46,13 +53,6 @@ function enrichPerformance(arrayPerformance) {
     result.play = calculator.play;
     result.amount = calculator.amount;
     result.volumeCredits = calculator.volumeCredits;
-    return result;
-}
-
-function volumeCreditsFor(arrayPerformance) {
-    let result = 0;
-    result += Math.max(arrayPerformance.audience - 30, 0);
-    if ("comedy" === arrayPerformance.play.type) result += Math.floor(arrayPerformance.audience / 5);
     return result;
 }
 
