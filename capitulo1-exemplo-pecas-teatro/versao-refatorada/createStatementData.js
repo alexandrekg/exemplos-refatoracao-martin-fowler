@@ -49,8 +49,6 @@ function enrichPerformance(arrayPerformance) {
     return result;
 }
 
-
-
 function volumeCreditsFor(arrayPerformance) {
     let result = 0;
     result += Math.max(arrayPerformance.audience - 30, 0);
@@ -70,3 +68,6 @@ function playFor(arrayPerformance) {
     return plays[arrayPerformance.playID];
 }
 
+function amountFor(arrayPerformance) {
+    return new PerformanceCalculator(arrayPerformance, playFor(arrayPerformance)).amount;
+}

@@ -36,3 +36,10 @@ function renderHtml() {
     result += `<p>You earned <em>${data.totalVolumeCredits}</em> credits</p>\n`;
     return result;
 }
+
+
+const plays = require('./plays.json');
+const invoices = require('./invoices.json');
+
+
+console.log(statement(invoices, plays));
