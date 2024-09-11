@@ -5,7 +5,7 @@ function usd(aNumber) {
     return new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format(aNumber / 100);
 }
 
-function statement(invoice, plays) {
+export default function statement(invoice, plays) {
     return renderPlainText(createStatementData(invoice, plays));
 }
 

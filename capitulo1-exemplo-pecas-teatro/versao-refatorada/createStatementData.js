@@ -1,3 +1,10 @@
+class PerformanceCalculator {
+    constructor(arrayPerformance, arrayPlay) {
+        this.performance = arrayPerformance;
+        this.play = arrayPlay;
+    }
+}
+
 export default function createStatementData(invoice, plays) {
     const result = {};
     result.customer = invoice.customer;
@@ -7,41 +14,19 @@ export default function createStatementData(invoice, plays) {
     return result;
 }
 
-function enrichPerformance(aPerformance) {
-    const result = Object.assign({}, aPerformance);
-    result.play = playFor(result);
+function enrichPerformance(arrayPerformance) {
+    const calculator = new PerformanceCalculator(arrayPerformance, playFor(arrayPerformance));
+    const result = Object.assign({}, arrayPerformance);
+    result.play = calculator.play;
     result.amount = amountFor(result);
     result.volumeCredits = volumeCreditsFor(result);
     return result;
 }
 
-function playFor(aPerformance) {
-    return plays[aPerformance.playID]
-}
-
-function totalAmount(data) {
-    return data.performances.reduce((total, p) => total + p.amount, 0)
-}
-
-function totalVolumeCredits(data) {
-    return data.performances.reduce((total, p) => total + p.volumeCredits, 0)
-}
-
-function volumeCreditsFor(arrayPerformance) {
-    let result = 0;
-    result += Math.max(arrayPerformance.audience - 30, 0);
-    if ("comedy" === arrayPerformance.type) result += Math.floor(arrayPerformance.audience / 5);
-    return result;
-}
-
-function playFor(arrayPerformance) {
-    return plays[arrayPerformance.playID];
-}
-
 function amountFor(arrayPerformance) {
     let result = 0;
 
-    switch (playFor(arrayPerformance).type) {
+    switch (arrayPerformance.play.type) {
         case "tragedy":
             result = 40000;
             if (arrayPerformance.audience > 30) {
@@ -58,8 +43,28 @@ function amountFor(arrayPerformance) {
             result += 300 * arrayPerformance.audience;
             break;
         default:
-            throw new Error(`unknown type: ${playFor(arrayPerformance).type}`);
+            throw new Error(`unknown type: ${arrayPerformance.play.type}`);
     }
 
     return result;
 }
+
+function volumeCreditsFor(arrayPerformance) {
+    let result = 0;
+    result += Math.max(arrayPerformance.audience - 30, 0);
+    if ("comedy" === arrayPerformance.play.type) result += Math.floor(arrayPerformance.audience / 5);
+    return result;
+}
+
+function totalAmount(data) {
+    return data.performances.reduce((total, p) => total + p.amount, 0)
+}
+
+function totalVolumeCredits(data) {
+    return data.performances.reduce((total, p) => total + p.volumeCredits, 0)
+}
+
+function playFor(arrayPerformance) {
+    return plays[arrayPerformance.playID];
+}
+
