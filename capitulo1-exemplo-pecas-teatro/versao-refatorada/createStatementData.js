@@ -44,8 +44,8 @@ function enrichPerformance(arrayPerformance) {
     const calculator = new PerformanceCalculator(arrayPerformance, playFor(arrayPerformance));
     const result = Object.assign({}, arrayPerformance);
     result.play = calculator.play;
-    result.amount = amountFor(result);
-    result.volumeCredits = volumeCreditsFor(result);
+    result.amount = calculator.amount;
+    result.volumeCredits = calculator.volumeCredits;
     return result;
 }
 
