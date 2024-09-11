@@ -3,6 +3,32 @@ class PerformanceCalculator {
         this.performance = arrayPerformance;
         this.play = arrayPlay;
     }
+
+    getAmount(this) {
+        let result = 0;
+    
+        switch (this.play.type) {
+            case "tragedy":
+                result = 40000;
+                if (this.performance.audience > 30) {
+                    // exemplo: this.audience for 50, 1000 * 20 (this.audience - 30), ou seja, vou somar no result 40000 + 20000
+                    result += 1000 * (this.performance.audience - 30);
+                }
+                break;
+            case "comedy":
+                result = 30000;
+                if (this.performance.audience > 20) {
+                    // exemplo: this.audience for 50, 10000 + (500 * 30) (this.audience - 20), ou seja, vou somar no result 30000 + 10000 + 15000
+                    result += 10000 + 500 * (this.performance.audience - 20);
+                }
+                result += 300 * this.performance.audience;
+                break;
+            default:
+                throw new Error(`unknown type: ${this.play.type}`);
+        }
+    
+        return result;
+    }
 }
 
 export default function createStatementData(invoice, plays) {
@@ -23,31 +49,7 @@ function enrichPerformance(arrayPerformance) {
     return result;
 }
 
-function amountFor(arrayPerformance) {
-    let result = 0;
 
-    switch (arrayPerformance.play.type) {
-        case "tragedy":
-            result = 40000;
-            if (arrayPerformance.audience > 30) {
-                // exemplo: arrayPerformance.audience for 50, 1000 * 20 (arrayPerformance.audience - 30), ou seja, vou somar no result 40000 + 20000
-                result += 1000 * (arrayPerformance.audience - 30);
-            }
-            break;
-        case "comedy":
-            result = 30000;
-            if (arrayPerformance.audience > 20) {
-                // exemplo: arrayPerformance.audience for 50, 10000 + (500 * 30) (arrayPerformance.audience - 20), ou seja, vou somar no result 30000 + 10000 + 15000
-                result += 10000 + 500 * (arrayPerformance.audience - 20);
-            }
-            result += 300 * arrayPerformance.audience;
-            break;
-        default:
-            throw new Error(`unknown type: ${arrayPerformance.play.type}`);
-    }
-
-    return result;
-}
 
 function volumeCreditsFor(arrayPerformance) {
     let result = 0;
