@@ -48,12 +48,16 @@ export default function createStatementData(invoice, plays) {
 }
 
 function enrichPerformance(arrayPerformance) {
-    const calculator = new PerformanceCalculator(arrayPerformance, playFor(arrayPerformance));
+    const calculator = createPerformanceCalculator(arrayPerformance, playFor(arrayPerformance));
     const result = Object.assign({}, arrayPerformance);
     result.play = calculator.play;
     result.amount = calculator.amount;
     result.volumeCredits = calculator.volumeCredits;
     return result;
+}
+
+function createPerformanceCalculator(arrayPerformance, arrayPlay) {
+    return new PerformanceCalculator(arrayPerformance, arrayPlay);
 }
 
 function totalAmount(data) {
