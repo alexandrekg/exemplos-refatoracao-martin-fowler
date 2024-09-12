@@ -1,17 +1,3 @@
-class PerformanceCalculator {
-    constructor(arrayPerformance, arrayPlay) {
-        this.performance = arrayPerformance;
-        this.play = arrayPlay;
-    }
-
-    getAmount(this) {
-        throw new Error('subclass responsibility');
-    }
-
-    getVolumeCredits() {
-        return Math.max(this.performance.audience - 30, 0);
-    }
-}
 
 export default function createStatementData(invoice, plays) {
     const result = {};
@@ -37,6 +23,21 @@ function createPerformanceCalculator(arrayPerformance, arrayPlay) {
         case "comedy": return new ComedyCalculator(arrayPerformance, arrayPlay);
         default:
             throw new Error(`unknown type: ${arrayPlay.type}`);
+    }
+}
+
+class PerformanceCalculator {
+    constructor(arrayPerformance, arrayPlay) {
+        this.performance = arrayPerformance;
+        this.play = arrayPlay;
+    }
+
+    getAmount(this) {
+        throw new Error('subclass responsibility');
+    }
+
+    getVolumeCredits() {
+        return Math.max(this.performance.audience - 30, 0);
     }
 }
 
