@@ -9,10 +9,7 @@ class PerformanceCalculator {
     }
 
     getVolumeCredits() {
-        let result = 0;
-        result += Math.max(this.performance.audience - 30, 0);
-        if ("comedy" === this.play.type) result += Math.floor(this.performance.audience / 5);
-        return result;
+        return Math.max(this.performance.audience - 30, 0);
     }
 }
 
@@ -41,8 +38,6 @@ function createPerformanceCalculator(arrayPerformance, arrayPlay) {
         default:
             throw new Error(`unknown type: ${arrayPlay.type}`);
     }
-
-    return new PerformanceCalculator(arrayPerformance, arrayPlay);
 }
 
 class TragedyCalculator extends PerformanceCalculator {
@@ -65,6 +60,10 @@ class ComedyCalculator extends PerformanceCalculator {
         }
         result += 300 * this.performance.audience;
         return result;
+    }
+
+    getVolumeCredits() {
+        return super.volumeCredits + Math.floor(this.performance.audience / 5);
     }
 }
 
