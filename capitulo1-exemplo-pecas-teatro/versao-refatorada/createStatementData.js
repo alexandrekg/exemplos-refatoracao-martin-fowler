@@ -5,29 +5,7 @@ class PerformanceCalculator {
     }
 
     getAmount(this) {
-        let result = 0;
-    
-        switch (this.play.type) {
-            case "tragedy":
-                result = 40000;
-                if (this.performance.audience > 30) {
-                    // exemplo: this.audience for 50, 1000 * 20 (this.audience - 30), ou seja, vou somar no result 40000 + 20000
-                    result += 1000 * (this.performance.audience - 30);
-                }
-                break;
-            case "comedy":
-                result = 30000;
-                if (this.performance.audience > 20) {
-                    // exemplo: this.audience for 50, 10000 + (500 * 30) (this.audience - 20), ou seja, vou somar no result 30000 + 10000 + 15000
-                    result += 10000 + 500 * (this.performance.audience - 20);
-                }
-                result += 300 * this.performance.audience;
-                break;
-            default:
-                throw new Error(`unknown type: ${this.play.type}`);
-        }
-    
-        return result;
+        throw new Error('subclass responsibility');
     }
 
     getVolumeCredits() {
@@ -57,7 +35,37 @@ function enrichPerformance(arrayPerformance) {
 }
 
 function createPerformanceCalculator(arrayPerformance, arrayPlay) {
+    switch (arrayPlay.type) {
+        case "tragedy": return new TragedyCalculator(arrayPerformance, arrayPlay);
+        case "comedy": return new ComedyCalculator(arrayPerformance, arrayPlay);
+        default:
+            throw new Error(`unknown type: ${arrayPlay.type}`);
+    }
+
     return new PerformanceCalculator(arrayPerformance, arrayPlay);
+}
+
+class TragedyCalculator extends PerformanceCalculator {
+    getAmount() {
+        result = 40000;
+        if (this.performance.audience > 30) {
+            // exemplo: this.audience for 50, 1000 * 20 (this.audience - 30), ou seja, vou somar no result 40000 + 20000
+            result += 1000 * (this.performance.audience - 30);
+        }
+        return result;
+    }
+}
+
+class ComedyCalculator extends PerformanceCalculator {
+    getAmount() {
+        result = 30000;
+        if (this.performance.audience > 20) {
+            // exemplo: this.audience for 50, 10000 + (500 * 30) (this.audience - 20), ou seja, vou somar no result 30000 + 10000 + 15000
+            result += 10000 + 500 * (this.performance.audience - 20);
+        }
+        result += 300 * this.performance.audience;
+        return result;
+    }
 }
 
 function totalAmount(data) {
